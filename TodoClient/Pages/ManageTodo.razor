@@ -1,0 +1,20 @@
+﻿@page "/manageTodo"
+
+<PageTitle>Todo</PageTitle>
+
+<h1>Todo</h1>
+<textarea @bind="TodoTitle"></textarea>
+<button class="btn btn-primary" @onclick="AddTodo">Add Todo</button>
+
+@code {
+    string TodoTitle { get; set; }
+    RestSharp.RestClient todoRestClient;
+
+    private void AddTodo()
+    {
+        todoRestClient = new RestSharp.RestClient("http://localhost/todoitems");
+        var request = new RestSharp.RestRequest(RestSharp.Method.POST);
+        request.AddJsonBody(new Dictionary<string, string>() { { "Title", TodoTitle } });
+        todoRestClient.Execute(request);
+    }
+}
