@@ -1,23 +1,31 @@
 ﻿@page "/manageTodo"
+@using TodoClient.Data;
+@using MinApi.Services;
+
+@inject TodoDataService todoDataService
 
 <PageTitle>Todo</PageTitle>
 
 <h1>A demo of minimal REST API w/ Blazor client</h1>
-<div class="form-group">
-    <label for="TodoTitle" class="col-form-label">Title</label>
-    <input id="TodoTitle" @bind="TodoTitle"></input>
-    <button class="btn btn-primary" 
-        @onclick="AddTodo">Add New Todo</button>
-</div>
+
+<EditForm Model=@NewTodo>
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="TodoTitle" class="col-form-label">Title</label>        
+        <InputText id="TodoTitle" @bind-Value="@NewTodo.Title"></InputText>
+        <ValidationMessage For="@(() => NewTodo.Title)" />
+        <button class="btn btn-primary" type="submit"
+            @onclick="AddTodo">Add</button>
+    </div>
+</EditForm>
+
+
 @code {
     string TodoTitle { get; set; }
-    RestSharp.RestClient todoRestClient;
+    [Parameter] public TodoItem NewTodo { get; set; } = new TodoItem();
 
-    private void AddTodo()
-    {
-        todoRestClient = new RestSharp.RestClient("http://localhost/todoitems");
-        var request = new RestSharp.RestRequest(RestSharp.Method.POST);
-        request.AddJsonBody(new Dictionary<string, string>() { { "Title", TodoTitle } });
-        todoRestClient.Execute(request);
+    private void AddTodo() {
+        todoDataService.Post(TodoTitle);
+        NewTodo = new TodoItem();
     }
 }
