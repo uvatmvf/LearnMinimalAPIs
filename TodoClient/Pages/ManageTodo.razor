@@ -2,10 +2,13 @@
 
 <PageTitle>Todo</PageTitle>
 
-<h1>Todo</h1>
-<textarea @bind="TodoTitle"></textarea>
-<button class="btn btn-primary" @onclick="AddTodo">Add Todo</button>
-
+<h1>A demo of minimal REST API w/ Blazor client</h1>
+<div class="form-group">
+    <label for="TodoTitle" class="col-form-label">Title</label>
+    <input id="TodoTitle" @bind="TodoTitle"></input>
+    <button class="btn btn-primary" 
+        @onclick="AddTodo">Add New Todo</button>
+</div>
 @code {
     string TodoTitle { get; set; }
     RestSharp.RestClient todoRestClient;
