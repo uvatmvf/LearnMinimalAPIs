@@ -23,7 +23,7 @@ app.MapGet("/todoitems", async (http) =>
 {
     var dbContext = http.RequestServices.GetService<TodoDbContext>();
     var todoItems = await dbContext.TodoItems.ToListAsync();
-
+    await http.Response.WriteAsJsonAsync(todoItems);
 });
 
 app.MapGet("/todoitems/{id}", async (http) =>

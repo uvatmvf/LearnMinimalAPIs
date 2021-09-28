@@ -34,12 +34,11 @@
     </div>
 }
 @code {
-    string TodoTitle { get; set; }
     [Parameter] public TodoItem NewTodo { get; set; } = new TodoItem();
     IList<TodoItem> OutStandingTodos { get; set; } 
         
     private void AddTodo() {
-        todoDataService.Post(TodoTitle);
+        todoDataService.Post(NewTodo.Title);
         NewTodo = new TodoItem();
         OutStandingTodos = todoDataService.GetAll();
     }
