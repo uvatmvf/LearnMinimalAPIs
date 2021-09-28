@@ -22,7 +22,7 @@ app.MapGet("/hello", (HttpContext context, HelloService helloService) =>
 app.MapGet("/todoitems", async (http) =>
 {
     var dbContext = http.RequestServices.GetService<TodoDbContext>();
-    var todoItems = await dbContext.TodoItmes.ToListAsync();
+    var todoItems = await dbContext.TodoItems.ToListAsync();
 
 });
 
@@ -34,7 +34,7 @@ app.MapGet("/todoitems/{id}", async (http) =>
         return;
     }
     var dbContext = http.RequestServices.GetService<TodoDbContext>();
-    var todoItem = await dbContext.TodoItmes.FindAsync(int.Parse(id.ToString()));
+    var todoItem = await dbContext.TodoItems.FindAsync(int.Parse(id.ToString()));
     if (todoItem == null)
     {
         http.Response.StatusCode = (int)HttpStatusCode.NotFound;
@@ -47,7 +47,7 @@ app.MapPost("/todoitems", async (http) =>
 {
     var todoItem = await http.Request.ReadFromJsonAsync<TodoItem>();
     var dbContext = http.RequestServices.GetService<TodoDbContext>();
-    dbContext.TodoItmes.Add(todoItem);
+    dbContext.TodoItems.Add(todoItem);
     await dbContext.SaveChangesAsync();
     http.Response.StatusCode = (int)HttpStatusCode.NoContent;
 });
@@ -60,7 +60,7 @@ app.MapPut("/todoitems/{id}", async (http) =>
         return;
     }
     var dbContext = http.RequestServices.GetService<TodoDbContext>();
-    var todoItem = await dbContext.TodoItmes.FindAsync(int.Parse(id.ToString()));
+    var todoItem = await dbContext.TodoItems.FindAsync(int.Parse(id.ToString()));
     if (todoItem == null)
     {
         http.Response.StatusCode = (int)HttpStatusCode.NotFound;
@@ -81,13 +81,13 @@ app.MapDelete("/todoitems/{id}", async (http) =>
         return;
     }
     var dbContext = http.RequestServices.GetService<TodoDbContext>();
-    var todoItem = await dbContext.TodoItmes.FindAsync(int.Parse(id.ToString()));
+    var todoItem = await dbContext.TodoItems.FindAsync(int.Parse(id.ToString()));
     if (todoItem == null)
     {
         http.Response.StatusCode = (int)HttpStatusCode.NotFound;
         return;
     }
-    dbContext.TodoItmes.Remove(todoItem);
+    dbContext.TodoItems.Remove(todoItem);
     await dbContext.SaveChangesAsync();
     http.Response.StatusCode = (int)HttpStatusCode.NoContent;
 });

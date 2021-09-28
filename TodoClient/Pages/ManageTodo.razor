@@ -19,13 +19,28 @@
     </div>
 </EditForm>
 
-
+@if (OutStandingTodos != null)
+{
+    <div class="table-responsive">
+        <table class="table table-hover">
+            @foreach (var todo in OutStandingTodos)
+            {
+                <tr>
+                    <td>@todo.Title</td>             
+                    <td>@todo.IsCompleted</td>
+                </tr>
+            }
+        </table>
+    </div>
+}
 @code {
     string TodoTitle { get; set; }
     [Parameter] public TodoItem NewTodo { get; set; } = new TodoItem();
-
+    IList<TodoItem> OutStandingTodos { get; set; } 
+        
     private void AddTodo() {
         todoDataService.Post(TodoTitle);
         NewTodo = new TodoItem();
+        OutStandingTodos = todoDataService.GetAll();
     }
 }
