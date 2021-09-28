@@ -11,6 +11,6 @@ namespace MinApi.Services
         protected TodoDbContext()
         {
         }
-        public DbSet<TodoItem> TodoItmes { get; set; }
+        public DbSet<TodoItem> TodoItems { get; set; }
     }
 }
