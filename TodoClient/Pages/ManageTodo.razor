@@ -6,7 +6,7 @@
 
 <PageTitle>Todo</PageTitle>
 
-<h1>A demo of minimal REST API w/ Blazor client</h1>
+<h1>A Minimal REST API demo w/ Blazor client</h1>
 
 <EditForm Model=@NewTodo>
     <DataAnnotationsValidator />
@@ -23,13 +23,21 @@
 {
     <div class="table-responsive">
         <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Complete</th>
+                    <th scope="col">Title</th>
+                </tr>
+            </thead>
+            <tbody>
             @foreach (var todo in OutStandingTodos)
             {
                 <tr>
-                    <td>@todo.Title</td>             
-                    <td>@todo.IsCompleted</td>
+                    <td><input type="checkbox" bind="@todo.IsCompleted" /></td>
+                    <td>@todo.Title</td>                                 
                 </tr>
             }
+            </tbody>
         </table>
     </div>
 }
