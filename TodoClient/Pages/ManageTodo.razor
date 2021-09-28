@@ -46,15 +46,17 @@
     [Parameter] public TodoItem NewTodo { get; set; } = new TodoItem();
     IList<TodoItem> OutStandingTodos { get; set; } 
         
-    private void AddTodo() {
-        todoDataService.Post(NewTodo.Title);
+    private async void AddTodo() {
+        await todoDataService.Post(NewTodo.Title);
         NewTodo = new TodoItem();
-        OutStandingTodos = todoDataService.GetAll();
+        OutStandingTodos = await todoDataService.GetAllAsync();
+        StateHasChanged();
     }
 
-    private void DeleteTodo(TodoItem deleteMe)
+    private async void DeleteTodo(TodoItem deleteMe)
     {
-        todoDataService.Delete(deleteMe);
-        OutStandingTodos = todoDataService.GetAll();
+        await todoDataService.Delete(deleteMe);
+        OutStandingTodos = await todoDataService.GetAllAsync();
+        StateHasChanged();
     }
 }
