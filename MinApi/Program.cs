@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using MinApi;
 using MinApi.Services;
 using System.Net;
 
@@ -34,7 +33,7 @@ app.MapGet("/todoitems/{id}", async (http) =>
         return;
     }
     var dbContext = http.RequestServices.GetService<TodoDbContext>();
-    var todoItem = await dbContext.TodoItems.FindAsync(int.Parse(id.ToString()));
+    var todoItem = await dbContext.TodoItems.FindAsync(Guid.Parse(id.ToString()));
     if (todoItem == null)
     {
         http.Response.StatusCode = (int)HttpStatusCode.NotFound;
@@ -46,6 +45,7 @@ app.MapGet("/todoitems/{id}", async (http) =>
 app.MapPost("/todoitems", async (http) =>
 {
     var todoItem = await http.Request.ReadFromJsonAsync<TodoItem>();
+    todoItem.Id = Guid.NewGuid();
     var dbContext = http.RequestServices.GetService<TodoDbContext>();
     dbContext.TodoItems.Add(todoItem);
     await dbContext.SaveChangesAsync();
@@ -60,7 +60,7 @@ app.MapPut("/todoitems/{id}", async (http) =>
         return;
     }
     var dbContext = http.RequestServices.GetService<TodoDbContext>();
-    var todoItem = await dbContext.TodoItems.FindAsync(int.Parse(id.ToString()));
+    var todoItem = await dbContext.TodoItems.FindAsync(Guid.Parse(id.ToString()));
     if (todoItem == null)
     {
         http.Response.StatusCode = (int)HttpStatusCode.NotFound;
@@ -81,13 +81,13 @@ app.MapDelete("/todoitems/{id}", async (http) =>
         return;
     }
     var dbContext = http.RequestServices.GetService<TodoDbContext>();
-    var todoItem = await dbContext.TodoItems.FindAsync(int.Parse(id.ToString()));
+    var todoItem = await dbContext.TodoItems.FindAsync(Guid.Parse(id.ToString()));
     if (todoItem == null)
     {
         http.Response.StatusCode = (int)HttpStatusCode.NotFound;
         return;
     }
-    dbContext.TodoItems.Remove(todoItem);
+    dbContext.TodoItems.Remove(todoItem);    
     await dbContext.SaveChangesAsync();
     http.Response.StatusCode = (int)HttpStatusCode.NoContent;
 });

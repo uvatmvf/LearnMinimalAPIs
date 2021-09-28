@@ -34,7 +34,8 @@
             {
                 <tr>
                     <td><input type="checkbox" bind="@todo.IsCompleted" /></td>
-                    <td>@todo.Title</td>                                 
+                    <td>@todo.Title</td>
+                    <td><button onclick="@(() => DeleteTodo(todo))" class="btn-close"></button> </td>
                 </tr>
             }
             </tbody>
@@ -48,6 +49,12 @@
     private void AddTodo() {
         todoDataService.Post(NewTodo.Title);
         NewTodo = new TodoItem();
+        OutStandingTodos = todoDataService.GetAll();
+    }
+
+    private void DeleteTodo(TodoItem deleteMe)
+    {
+        todoDataService.Delete(deleteMe);
         OutStandingTodos = todoDataService.GetAll();
     }
 }
