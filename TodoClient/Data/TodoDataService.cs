@@ -32,5 +32,14 @@ public class TodoDataService
             var response = todoRestClient.Execute(request);
             return response;
         });
+    public Task<IRestResponse> Update(TodoItem update) =>
+        Task.Run(() =>
+        {
+            var todoRestClient = new RestClient($"{apiEndpoint}/{update.Id}");
+            var request = new RestRequest(Method.PUT);
+            request.AddJsonBody(JsonConvert.SerializeObject(update));
+            var response = todoRestClient.Execute(request);
+            return response;
+        });
 
 }

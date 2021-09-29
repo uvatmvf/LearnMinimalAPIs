@@ -6,7 +6,7 @@
 
 <PageTitle>Todo</PageTitle>
 
-<h1>A Minimal REST API demo w/ Blazor client</h1>
+<h1>A Blazor client to minimal REST API demo</h1>
 
 <EditForm Model=@NewTodo>
     <DataAnnotationsValidator />
@@ -22,18 +22,23 @@
 @if (OutStandingTodos != null)
 {
     <div class="table-responsive">
-        <table class="table table-hover">
+        <table class="table table-hover w-auto table-bordered">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col">Complete</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
                     <th scope="col">Title</th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
             @foreach (var todo in OutStandingTodos)
             {
                 <tr>
-                    <td><input type="checkbox" bind="@todo.IsCompleted" /></td>
+                    @*<input type="checkbox" bind="@todo.IsCompleted" />*@
+                    @*<*@
+                    <td><EditForm Model=@todo><InputCheckbox @bind-Value="todo.IsCompleted" /></EditForm></td>
+                    <td><button onclick="@(() => UpdateTodo(todo))" class="btn-success ml-1">Save</button></td>
                     <td>@todo.Title</td>
                     <td><button onclick="@(() => DeleteTodo(todo))" class="btn-close"></button> </td>
                 </tr>
@@ -44,18 +49,34 @@
 }
 @code {
     [Parameter] public TodoItem NewTodo { get; set; } = new TodoItem();
-    IList<TodoItem> OutStandingTodos { get; set; } 
-        
+    IList<TodoItem> OutStandingTodos { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        RefreshData();
+        return Task.CompletedTask;
+    }
+
     private async void AddTodo() {
         await todoDataService.Post(NewTodo.Title);
         NewTodo = new TodoItem();
-        OutStandingTodos = await todoDataService.GetAllAsync();
-        StateHasChanged();
+        await RefreshData();
     }
 
     private async void DeleteTodo(TodoItem deleteMe)
     {
         await todoDataService.Delete(deleteMe);
+        await RefreshData();
+    }
+
+    private async void UpdateTodo(TodoItem updateMe)
+    {
+        await todoDataService.Update(updateMe);
+        await RefreshData();
+    }
+
+    private async Task RefreshData()  
+    {
         OutStandingTodos = await todoDataService.GetAllAsync();
         StateHasChanged();
     }
