@@ -35,8 +35,6 @@
             @foreach (var todo in OutStandingTodos)
             {
                 <tr>
-                    @*<input type="checkbox" bind="@todo.IsCompleted" />*@
-                    @*<*@
                     <td><EditForm Model=@todo><InputCheckbox @bind-Value="todo.IsCompleted" /></EditForm></td>
                     <td><button onclick="@(() => UpdateTodo(todo))" class="btn-success ml-1">Save</button></td>
                     <td>@todo.Title</td>
